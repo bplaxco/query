@@ -33,6 +33,8 @@ $123.45
 ## Syntax
 
 ```
+cmd_list
+
 cmd_list: [cmd [| cmd_list]]
 cmd: name arg_list
 name: string
@@ -42,7 +44,7 @@ value: a jq filter applied to the current context
 
 ## Commands
 
-None of the commands are implemented y et
+None of the commands are implemented yet
 
 ## Goal
 
