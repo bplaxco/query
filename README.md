@@ -39,6 +39,7 @@ cmd_list: [cmd [| cmd_list]]
 cmd: name arg_list
 name: string
 arg_list: [key=value [arg_list]]
+key: string
 value: a jq filter applied to the current context 
 ```
 
