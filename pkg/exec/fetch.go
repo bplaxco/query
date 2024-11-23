@@ -7,7 +7,12 @@ import (
 )
 
 func fetchURL(eCtx ExecCtx, args map[string]string) (ExecCtx, error) {
-	resp, err := http.Get(args["url"])
+	url, hasURL := args["url"]
+	if !hasURL {
+		return eCtx, fmt.Errorf("no url provided for fetch with a source of url")
+	}
+
+	resp, err := http.Get(url)
 	if err != nil {
 		return eCtx, err
 	}
@@ -24,16 +29,24 @@ func fetchURL(eCtx ExecCtx, args map[string]string) (ExecCtx, error) {
 
 	fieldName, customNameDefined := args["name"]
 	if !customNameDefined {
-		fieldName = "fetched_url"
+		fieldName = "result"
 	}
 
 	return NewExecCtx(eCtx, ExecCtx{fieldName: string(body)}), err
 }
 
 func fetch(eCtx ExecCtx, args map[string]string) (ExecCtx, error) {
-	if _, hasURL := args["url"]; hasURL {
-		return fetchURL(eCtx, args)
+	source, hasSource := args["source"]
+
+	if !hasSource {
+		return eCtx, fmt.Errorf("no source provided for fetch")
 	}
 
-	return eCtx, fmt.Errorf("not enough options provided to fetch")
+	switch source {
+	case "url":
+		return fetchURL(eCtx, args)
+
+	}
+
+	return eCtx, fmt.Errorf("%q is not a valid source for fetch", source)
 }
