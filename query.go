@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/bplaxco/query/pkg/exec"
 	"github.com/bplaxco/query/pkg/parser"
 )
 
@@ -16,7 +17,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, command := range parser.Parse(string(rawQuery)) {
-		fmt.Printf("%#v\n", command)
-	}
+	ctx, err := exec.ExecList(parser.Parse(string(rawQuery)))
+	fmt.Printf("#%#v %#v\n", ctx, err)
 }

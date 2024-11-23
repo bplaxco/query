@@ -3,6 +3,8 @@ package parser
 import (
 	"log"
 	"strings"
+
+	"github.com/bplaxco/query/pkg/exec"
 )
 
 type Lexer struct {
@@ -128,24 +130,15 @@ func (l *Lexer) Tokens() []string {
 	return l.tokens
 }
 
-type Command struct {
-	Name string
-	Args map[string]string
-}
-
-func NewCommand(name string) *Command {
-	return &Command{Name: name, Args: make(map[string]string)}
-}
-
-func Parse(data string) []*Command {
+func Parse(data string) []*exec.Command {
 	tokens := NewLexer(data).Tokens()
 	// Guess a reasonable size for the command slice
-	commands := make([]*Command, 0, len(tokens)/5)
+	commands := make([]*exec.Command, 0, len(tokens)/5)
 
-	var command *Command
+	var command *exec.Command
 	for _, token := range tokens {
 		if command == nil {
-			command = NewCommand(token)
+			command = exec.NewCommand(token)
 			commands = append(commands, command)
 		} else if token == "|" {
 			command = nil
