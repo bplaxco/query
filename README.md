@@ -17,7 +17,7 @@ fetch
     q="subject:(Bill Available) 'Total'"
     maxResults=1 
 | jq filter="{\"email_id\": .messages[0].id}" 
-| fetch source=google.mail.users.messages.get userId="me" id=.email_id
+| fetch source="google.mail.users.messages.get" userId="me" id=.email_id
 | regex match="\$\d+\.\d+" name="total"
 | jq raw_output=true filter=".total"
 ```
